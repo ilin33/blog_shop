@@ -35,6 +35,11 @@
                            <a href="{% url 'create_post' %}">Create post</a>
                         </li>
                     {% endif %}
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'my_posts' %}">Мої пости</a>
+                        </li>
+                    {% endif %}
                 </ul>
 
             {% include 'blog/login.html' %}

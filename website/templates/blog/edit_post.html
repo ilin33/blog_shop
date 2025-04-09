@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+  <div class="container">
+    <h2>Редагувати пост: {{ post.title }}</h2>
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit" class="btn btn-success">Зберегти зміни</button>
+      <a href="{% url 'my_posts' %}" class="btn btn-secondary">Назад</a>
+    </form>
+  </div>
+{% endblock %}

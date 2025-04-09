@@ -21,6 +21,15 @@
     </p>
     <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
     <hr>
+<p>
+  Теги:
+  {% for tag in post.tags.all %}
+    <a href="{% url 'tag' tag.name %}" class="badge bg-info text-white">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+  {% empty %}
+    <span>Немає тегів.</span>
+  {% endfor %}
+</p>
+    <hr>
     <img class="img-responsive" src="{{ post.image }}" alt="">
     <hr>
     <p>{{ post.content|truncatewords:20 }}</p>
