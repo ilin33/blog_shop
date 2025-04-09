@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+
+{% block content %}
+  <h2>Профіль користувача</h2>
+  <p><strong>Ім'я:</strong> {{ profile.user.username }}</p>
+  <p><strong>Email:</strong> {{ profile.user.email }}</p>
+  <p><strong>Телефон:</strong> {{ profile.phone_number }}</p>
+  <p><strong>Місцезнаходження:</strong> {{ profile.location }}</p>
+  <p><strong>Дата народження:</strong> {{ profile.birth_date }}</p>
+
+
+{% endblock %}

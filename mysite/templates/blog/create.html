@@ -1,0 +1,13 @@
+{% extends "blog/base.html" %}
+
+
+{% block content %}
+<h1 class="page-header">Create new post</h1>
+
+<form method="POST" action="{% url 'create_post' %}">
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+  {{ create_form|crispy }}
+  <input type="submit" value="save" class="btn btn-primary">
+</form>
+{% endblock %}
