@@ -3,11 +3,43 @@
 {% block content %}
   <div class="container">
     <h2>Редагувати пост: {{ post.title }}</h2>
-    <form method="post">
+
+    <!-- Форма для редагування посту -->
+    <form method="post" enctype="multipart/form-data">
       {% csrf_token %}
-      {{ form.as_p }}
+      {{ post_form.as_p }}  <!-- форма для редагування посту -->
       <button type="submit" class="btn btn-success">Зберегти зміни</button>
       <a href="{% url 'my_posts' %}" class="btn btn-secondary">Назад</a>
     </form>
+
+    <hr>
+
+    <!-- Форма для додавання додаткових зображень -->
+    <h3>Додати зображення в галерею:</h3>
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      {{ image_form.as_p }}  <!-- форма для додавання зображень -->
+      <button type="submit" class="btn btn-primary">Додати зображення</button>
+    </form>
+
+    <hr>
+
+    <!-- Галерея зображень -->
+    <h3>Галерея зображень:</h3>
+    <div class="gallery">
+      {% for image in post.images.all %}
+        <div class="gallery-item">
+          <img src="{{ image.image.url }}" alt="Image" class="img-thumbnail">
+          <p>{{ image.caption }}</p>
+          <!-- Кнопка для видалення зображення -->
+          <form method="post" action="{% url 'delete_image' image.id %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Видалити</button>
+          </form>
+        </div>
+      {% empty %}
+        <p>Галерея пуста.</p>
+      {% endfor %}
+    </div>
   </div>
 {% endblock %}

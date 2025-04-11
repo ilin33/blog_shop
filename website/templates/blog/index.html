@@ -1,5 +1,38 @@
 {% extends "blog/base.html" %}
 
+<!--    image blok-->
+{% block slider %}
+<div id="myCarousel" class="carousel slide" data-ride="carousel">
+  <!-- Indicators -->
+  <ol class="carousel-indicators">
+    {% for slide in slides %}
+      <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+    {% endfor %}
+  </ol>
+
+  <!-- Wrapper for slides -->
+  <div class="carousel-inner">
+    {% for slide in slides %}
+      <div class="item {% if forloop.first %}active{% endif %}">
+        <img src="{{ slide.image.url }}" alt="{{ slide.title }}" class="img-responsive center-block">
+        <div class="carousel-caption">
+          <h3>{{ slide.title }}</h3>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+  <!-- Controls -->
+  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
+    <span class="glyphicon glyphicon-chevron-left"></span>
+  </a>
+  <a class="right carousel-control" href="#myCarousel" data-slide="next">
+    <span class="glyphicon glyphicon-chevron-right"></span>
+  </a>
+</div>
+{% endblock %}
+<!--  end  image blok-->
+
 {% block content %}
 {% if messages %}
     {% for message in messages %}
@@ -9,6 +42,8 @@
     {% endfor %}
 {% else %}
 <h1 class="page-header">
+
+
     Page Heading
     <small>Secondary Text</small>
 </h1>

@@ -5,8 +5,8 @@ from django.db.models import Q
 from django.shortcuts import render, get_object_or_404, redirect
 from django.utils.timezone import now
 
-from .models import Post, Category, UserProfile, Tag
-from .forms import PostForm, CommentForm, UserForm, UserProfileForm, RegistrationForm
+from .models import Post, Category, UserProfile, Tag, SliderImage, PostImage
+from .forms import PostForm, CommentForm, UserForm, UserProfileForm, RegistrationForm, PostImageForm
 
 
 
@@ -19,11 +19,14 @@ def get_categories():
 
 def index(request):
     posts = Post.objects.all().order_by('-published_date')
+    slides = SliderImage.objects.order_by('order')
     # posts = Post.objects.filter(title__contains='django1')
     # posts = Post.objects.filter(published_date__year=2025)
     # posts = Post.objects.filter(published_date__month=1, published_date__year=2024)
     # posts = Post.objects.filter(category__name__exact="django")
-    context = {'posts': posts}
+    context = {'posts': posts,
+               'slides': slides
+               }
     context.update(get_categories())
     return render(request, "blog/index.html", context)
 
@@ -50,35 +53,29 @@ def search(request):
     context.update(get_categories())
     return render(request, "blog/index.html", context)
 
-# @login_required
-# def create_post(request):
-#     if request.method == 'POST':
-#         form = PostForm(request.POST)
-#         if form.is_valid():
-#             post = form.save(commit=False)
-#             post.published_date = now()
-#             post.save()
-#             return index(request)
-#     create_form = PostForm()
-#     context = {'create_form': create_form}
-#     context.update(get_categories())
-#     return render(request, "blog/create.html", context)
 @login_required
 def create_post(request):
     if request.method == 'POST':
-        form = PostForm(request.POST)
-        if form.is_valid():
-            post = form.save(commit=False)
+        post_form = PostForm(request.POST, request.FILES)  # обробка файлів
+        if post_form.is_valid():
+            post = post_form.save(commit=False)
             post.user = request.user  # Автор поста
             post.published_date = now()
-            post.save()
-            return redirect('my_posts')
-    else:
-        form = PostForm()
+            post.save()  # Зберігаємо основний пост
 
-    context = {'create_form': form}
-    context.update(get_categories())
+            # Додавання додаткових зображень
+            images = request.FILES.getlist('images')  # Отримуємо всі зображення
+            for image in images:
+                PostImage.objects.create(post=post, image=image)
+
+            return redirect('my_posts')  # Напрямок на сторінку всіх постів користувача
+    else:
+        post_form = PostForm()
+
+    context = {'create_form': post_form}
+    context.update(get_categories())  # Додати категорії (якщо є)
     return render(request, "blog/create.html", context)
+
 
 def login_view(request):
     if request.user.is_authenticated:
@@ -178,21 +175,44 @@ def delete_post(request, slug):
     return render(request, 'blog/confirm_delete.html', {'post': post})
 
 
+
 @login_required
 def edit_post(request, pk):
     post = get_object_or_404(Post, pk=pk, user=request.user)  # тільки свої пости
 
     if request.method == 'POST':
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            form.save()
-            return redirect('my_posts')
-    else:
-        form = PostForm(instance=post)
+        post_form = PostForm(request.POST, instance=post)
+        image_form = PostImageForm(request.POST, request.FILES)  # Додаємо форму для зображень
+        if post_form.is_valid():
+            post_form.save()  # Зберігаємо пост
 
-    context = {'form': form, 'post': post}
+            # Додавання нових зображень, якщо вони були вибрані
+            if image_form.is_valid() and 'image' in request.FILES:
+                new_image = image_form.save(commit=False)
+                new_image.post = post  # Прив'язуємо зображення до посту
+                new_image.save()
+
+            return redirect('edit_post', pk=post.pk)  # Перенаправляємо на сторінку редагування того ж посту
+
+    else:
+        post_form = PostForm(instance=post)
+        image_form = PostImageForm()  # Порожня форма для зображень
+
+    # Виводимо всі зображення, що належать до цього посту
+    context = {
+        'post_form': post_form,
+        'image_form': image_form,
+        'post': post,
+    }
+    context.update(get_categories())  # якщо потрібно показати категорії
     return render(request, 'blog/edit_post.html', context)
 
+@login_required
+def delete_image(request, image_id):
+    image = get_object_or_404(PostImage, id=image_id)
+    post = image.post
+    image.delete()  # Видалення зображення
+    return redirect('edit_post', pk=post.pk)  # Перенаправлення на редагування посту
 
 def register_view(request):
     if request.method == 'POST':
