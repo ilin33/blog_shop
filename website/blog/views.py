@@ -25,7 +25,8 @@ def index(request):
     # posts = Post.objects.filter(published_date__month=1, published_date__year=2024)
     # posts = Post.objects.filter(category__name__exact="django")
     context = {'posts': posts,
-               'slides': slides
+               'slides': slides,
+               'active_page': 'index'
                }
     context.update(get_categories())
     return render(request, "blog/index.html", context)
@@ -72,7 +73,7 @@ def create_post(request):
     else:
         post_form = PostForm()
 
-    context = {'create_form': post_form}
+    context = {'create_form': post_form, 'active_page': 'create_post'}
     context.update(get_categories())  # Додати категорії (якщо є)
     return render(request, "blog/create.html", context)
 
@@ -104,7 +105,7 @@ def logout_view(request):
 @login_required
 def profile_view(request):
     profile, created = UserProfile.objects.get_or_create(user=request.user)
-    return render(request, 'blog/profile.html', {'profile': profile})
+    return render(request, 'blog/profile.html', {'profile': profile, 'active_page': 'profile'})
 
 
 @login_required
@@ -127,6 +128,7 @@ def update_profile(request):
     context = {
         'user_form': user_form,
         'profile_form': profile_form,
+        'active_page': 'profile',
     }
     context.update(get_categories())  # якщо потрібно відображати категорії
     return render(request, 'blog/update_profile.html', context)
@@ -159,7 +161,7 @@ def post(request, title):
 @login_required
 def my_posts(request):
     posts = Post.objects.filter(user=request.user).order_by('-published_date')
-    context = {'posts': posts}
+    context = {'posts': posts, 'active_page': 'my_posts'}
     context.update(get_categories())  # якщо ти показуєш категорії
     return render(request, 'blog/my_post.html', context)
 

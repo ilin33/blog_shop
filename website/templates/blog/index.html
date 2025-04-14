@@ -1,21 +1,21 @@
 {% extends "blog/base.html" %}
-
-<!--    image blok-->
+{% with active_page="about" %}
 {% block slider %}
-<div id="myCarousel" class="carousel slide" data-ride="carousel">
+<div id="myCarousel" class="carousel slide" data-bs-ride="carousel">
   <!-- Indicators -->
   <ol class="carousel-indicators">
     {% for slide in slides %}
-      <li data-target="#myCarousel" data-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
+      <li data-bs-target="#myCarousel" data-bs-slide-to="{{ forloop.counter0 }}" {% if forloop.first %}class="active"{% endif %}></li>
     {% endfor %}
   </ol>
 
   <!-- Wrapper for slides -->
   <div class="carousel-inner">
     {% for slide in slides %}
-      <div class="item {% if forloop.first %}active{% endif %}">
-        <img src="{{ slide.image.url }}" alt="{{ slide.title }}" class="img-responsive center-block">
-        <div class="carousel-caption">
+      <div class="carousel-item {% if forloop.first %}active{% endif %}">
+        <img src="{{ slide.image.url }}" alt="{{ slide.title }}" class="d-block w-100" style="max-height: 380px; object-fit: cover;">
+
+        <div class="carousel-caption d-none d-md-block">
           <h3>{{ slide.title }}</h3>
         </div>
       </div>
@@ -23,68 +23,70 @@
   </div>
 
   <!-- Controls -->
-  <a class="left carousel-control" href="#myCarousel" data-slide="prev">
-    <span class="glyphicon glyphicon-chevron-left"></span>
-  </a>
-  <a class="right carousel-control" href="#myCarousel" data-slide="next">
-    <span class="glyphicon glyphicon-chevron-right"></span>
-  </a>
+  <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
+    <span class="bi bi-chevron-left" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+  <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
+    <span class="bi bi-chevron-right" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
 </div>
 {% endblock %}
-<!--  end  image blok-->
 
 {% block content %}
-{% if messages %}
+  {% if messages %}
     {% for message in messages %}
-        <div class="alert alert-{{ message.tags }}">
-            {{ message }}
-        </div>
+      <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+      </div>
     {% endfor %}
-{% else %}
-<h1 class="page-header">
+  {% else %}
+    <h1 class="page-header">
+      Page Heading
+      <small>Secondary Text</small>
+    </h1>
 
-
-    Page Heading
-    <small>Secondary Text</small>
-</h1>
-{% for post in posts %}
-    <h2>
+    {% for post in posts %}
+      <h2>
         <a href="{% url 'post' title=post.slug %}">{{ post.title }}</a>
-    </h2>
-    <p class="lead">
+      </h2>
+      <p class="lead">
         by <a href="index.php">{{ post.user }}</a>
-    </p>
-    <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
-    <hr>
-<p>
-  Теги:
-  {% for tag in post.tags.all %}
-    <a href="{% url 'tag' tag.name %}" class="badge bg-info text-white">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
-  {% empty %}
-    <span>Немає тегів.</span>
-  {% endfor %}
-</p>
-    <hr>
-    <img class="img-responsive" src="{{ post.image }}" alt="">
-    <hr>
-    <p>{{ post.content|truncatewords:20 }}</p>
-    <a class="btn btn-primary" href="{% url 'post' title=post.slug %}">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
-    <hr>
-{% empty %}
-<p>Немає постів!</p>
-{% endfor %}
-<!-- Pager -->
-<ul class="pager">
-    <li class="previous">
+      </p>
+      <p><span class="glyphicon glyphicon-time"></span> Posted on {{ post.published_date }}</p>
+      <hr>
+      <p>
+        Теги:
+        {% for tag in post.tags.all %}
+          <a href="{% url 'tag' tag.name %}" class="badge bg-info text-white">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+          <span>Немає тегів.</span>
+        {% endfor %}
+      </p>
+      <hr>
+      <img class="img-responsive" src="{{ post.image }}" alt="">
+      <hr>
+      <p>{{ post.content|truncatewords:20 }}</p>
+      <a class="btn btn-primary" href="{% url 'post' title=post.slug %}">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+      <hr>
+    {% empty %}
+      <p>Немає постів!</p>
+    {% endfor %}
+
+    <!-- Pager -->
+    <ul class="pager">
+      <li class="previous">
         <a href="#">&larr; Older</a>
-    </li>
-    <li class="next">
+      </li>
+      <li class="next">
         <a href="#">Newer &rarr;</a>
-    </li>
-</ul>
-{% endif %}
+      </li>
+    </ul>
+  {% endif %}
 {% endblock %}
 
 {% block sidebar %}
-{% include 'blog/sidebar.html' %}
+  {% include 'blog/sidebar.html' %}
 {% endblock %}
+{% endwith %}

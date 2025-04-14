@@ -2,36 +2,49 @@
 {% load static %}
 
 {% block content %}
-{% if category %}{{ category.name }}{% else %}Products{% endif %}
+    {% if category %}
+        <h1>{{ category.name }}</h1>
+    {% else %}
+        <h1>Products</h1>
+    {% endif %}
 
-    <div id="main" class="product-list">
-        <h1>{% if category %}{{ category.name }}{% else %}Products{% endif %}</h1>
-        {% for product in products %}
-            <div class="item">
-                <a href="{{ product.get_absolute_url }}">
-                    <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
-                </a>
-                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a><br>
-                ${{ product.price }}
-            </div>
-        {% endfor %}
+    <div class="container mt-4">
+        <div class="row">
+            {% for product in products %}
+                <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+                    <div class="card">
+                        <a href="{{ product.get_absolute_url }}">
+                            <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="card-img-top" alt="{{ product.name }}">
+                        </a>
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <a href="{{ product.get_absolute_url }}">{{ product.name }}</a>
+                            </h5>
+                            <p class="card-text">${{ product.price }}</p>
+                            <a href="{{ product.get_absolute_url }}" class="btn btn-primary">Детальніше</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
     </div>
+
 {% endblock %}
 
 {% block sidebar %}
- <div id="sidebar">
-    <h3>Categories</h3>
-    <div class="list-group">
-        <a href="{% url 'shop:product_list' %}"
-           class="list-group-item {% if not category %}active{% endif %}">
-            All
-        </a>
-        {% for c in categories %}
-            <a href="{{ c.get_absolute_url }}"
-               class="list-group-item {% if category and category.slug == c.slug %}active{% endif %}">
-                {{ c.name }}
+    <div id="sidebar">
+        <h3>Categories</h3>
+        <div class="list-group">
+            <a href="{% url 'shop:product_list' %}"
+               class="list-group-item {% if not category %}active{% endif %}">
+                All
             </a>
-        {% endfor %}
+            {% for c in categories %}
+                <a href="{{ c.get_absolute_url }}"
+                   class="list-group-item {% if category and category.slug == c.slug %}active{% endif %}">
+                    {{ c.name }}
+                </a>
+            {% endfor %}
+        </div>
     </div>
-</div>
 {% endblock %}

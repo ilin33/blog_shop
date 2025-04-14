@@ -1,20 +1,23 @@
 {% extends "blog/base.html" %}
 {% load static %}
 
-
-
 {% block content %}
-{% if category %}{{ category.title }}{% else %}Products{% endif %}
-    <div class="product-detail">
-        <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}">
-        <h1>{{ product.name }}</h1>
-        <h2><a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a></h2>
-        <p class="price">${{ product.price }}</p>
-        {{ product.description|linebreaks }}
-        <form action="{% url 'cart:cart_add' product.id %}" method="post">
-            {% csrf_token %}
-            {{cart_product_form}}
-            <input type="submit" value="Add to cart">
-        </form>
+    <div class="container mt-4">
+        <div class="row">
+            <div class="col-lg-6">
+                <!-- Image of the product -->
+                <img src="{% if product.image %}{{ product.image.url }}{% else %}{% static 'img/no_image.png' %}{% endif %}" class="img-fluid" alt="{{ product.name }}">
+            </div>
+            <div class="col-lg-6">
+                <h1>{{ product.name }}</h1>
+                <h3>${{ product.price }}</h3>
+                <p><strong>Category:</strong> <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></p>
+                <p>{{ product.description|linebreaks }}</p>
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <input type="submit" value="Додати до кошика" class="btn btn-primary">
+                </form>
+            </div>
+        </div>
     </div>
 {% endblock %}

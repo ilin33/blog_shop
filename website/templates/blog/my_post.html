@@ -1,5 +1,5 @@
 {% extends "blog/base.html" %}
-
+{% with active_page="about" %}
 {% block content %}
 <h2>Мої пости</h2>
 
@@ -24,3 +24,4 @@
     <p>У вас ще немає постів.</p>
 {% endif %}
 {% endblock %}
+{% endwith %}
