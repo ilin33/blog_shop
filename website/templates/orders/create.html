@@ -1,26 +1,57 @@
-{% extends "shop/base.html" %}
+{% extends "blog/base.html" %}
 {% load static %}
-{% block title %}
-Checkout
-{% endblock %}
+{% load widget_tweaks %}
+
+{% block title %}Оформлення замовлення{% endblock %}
+
 {% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Оформлення замовлення</h1>
 
-<h3>Your order</h3>
-<ul>
-    {% for item in cart %}
-    <li>
-        {{ item.quantity }}x {{item.product.name }}
-        <span>${{item.total_price}}</span>
-    </li>
-    {% endfor %}
-</ul>
-<p>Total: $ {{cart.get_total_price}}</p>
+    <form method="post" novalidate>
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form.first_name.label_tag }}
+                {{ form.first_name|add_class:"form-control mb-3" }}
 
-<form action="." method="post">
-    {% csrf_token%}
-    {{ form.as_p }}
-    <input type="submit" value="Place order">
-</form>
+                {{ form.last_name.label_tag }}
+                {{ form.last_name|add_class:"form-control mb-3" }}
 
+                {{ form.email.label_tag }}
+                {{ form.email|add_class:"form-control mb-3" }}
 
+                {{ form.address.label_tag }}
+                {{ form.address|add_class:"form-control mb-3" }}
+
+                {{ form.postal_code.label_tag }}
+                {{ form.postal_code|add_class:"form-control mb-3" }}
+
+                {{ form.city.label_tag }}
+                {{ form.city|add_class:"form-control mb-3" }}
+            </div>
+
+            <div class="col-md-6">
+                <h4>Ваше замовлення:</h4>
+                <ul class="list-group mb-3">
+                    {% for item in cart %}
+                        <li class="list-group-item d-flex justify-content-between lh-sm">
+                            <div>
+                                <h6 class="my-0">{{ item.product.name }}</h6>
+                                <small class="text-body-secondary">Кількість: {{ item.quantity }}</small>
+                            </div>
+                            <span class="text-body-secondary">${{ item.total_price }}</span>
+                        </li>
+                    {% endfor %}
+                    <li class="list-group-item d-flex justify-content-between">
+                        <strong>Загалом:</strong>
+                        <strong>${{ cart.get_total_price }}</strong>
+                    </li>
+                </ul>
+
+                <button type="submit" class="btn btn-success btn-lg w-100">Підтвердити замовлення</button>
+            </div>
+        </div>
+    </form>
+</div>
 {% endblock %}

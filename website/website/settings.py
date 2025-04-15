@@ -38,8 +38,11 @@ INSTALLED_APPS = [
     'helloweb',
     'blog',
     'crispy_forms',
-    "crispy_bootstrap4",
-    "shop"
+    'crispy_bootstrap4',
+    'shop',
+    'cart',
+    'orders',
+    'widget_tweaks'
 ]
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"
@@ -130,4 +133,6 @@ LOGOUT_URL = 'blog_logout'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CART_SESSION_ID = 'cart'
 

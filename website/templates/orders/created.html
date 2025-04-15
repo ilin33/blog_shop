@@ -1,9 +1,14 @@
-{% extends "shop/base.html" %}
+{% extends "blog/base.html" %}
 {% load static %}
-{% block title %}
-Thank you !
-{% endblock %}
-{% block content %}
-<h1>Your order has been successfully completed!.Your order number is <strong>{{ order.id}}</strong></h1>
 
+{% block title %}Замовлення оформлено{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="alert alert-success text-center">
+        <h2 class="mb-4">🎉 Дякуємо за ваше замовлення!</h2>
+        <p class="lead">Ваше замовлення успішно оформлено. Ми скоро зв’яжемося з вами для підтвердження.</p>
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary mt-4">Продовжити покупки</a>
+    </div>
+</div>
 {% endblock %}

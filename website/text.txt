@@ -1,0 +1,3 @@
+ <a href="{% url 'orders:order_create' %}" class="button">Checkout</a>
+
+ <a href="{% url 'cart:checkout' %}" class="btn btn-success">Оформити замовлення</a>

@@ -13,8 +13,9 @@
                 <h3>${{ product.price }}</h3>
                 <p><strong>Category:</strong> <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></p>
                 <p>{{ product.description|linebreaks }}</p>
-                <form action="#" method="post">
+                <form action="{% url 'cart:cart_add' product.id %}" method="post">
                     {% csrf_token %}
+                    {{cart_product_form}}
                     <input type="submit" value="Додати до кошика" class="btn btn-primary">
                 </form>
             </div>

@@ -24,6 +24,8 @@ urlpatterns = [
     # path('', include('helloweb.urls')),
     path('', include('blog.urls')),
     path('shop/', include(('shop.urls', 'shop'), namespace='shop')),
+    path('cart/', include(('cart.urls', 'cart'), namespace='cart')),
+    path('orders/', include('orders.urls', namespace='orders')),
 ]
 
 if settings.DEBUG:
