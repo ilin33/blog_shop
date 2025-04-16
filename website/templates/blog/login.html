@@ -1,22 +1,20 @@
 {% if user.is_authenticated %}
-<div class="navbar-form navbar-right">
-    <a href="{% url 'profile' %}" class="">Hello, {{ user }}</a>
+<div class="d-flex align-items-center ms-auto">
+    <a href="{% url 'profile' %}" class="me-2">Hello, {{ user }}</a>
     <a href="{% url 'blog_logout' %}" class="btn btn-danger">Logout</a>
-
-
 </div>
 {% else %}
-<form class="navbar-form navbar-right" method="POST" action="{% url 'blog_login' %}">
+<form class="d-flex align-items-center ms-auto" method="POST" action="{% url 'blog_login' %}">
     {% csrf_token %}
-    <div class="form-group">
+    <div class="me-2">
         <input type="text" placeholder="Login" name="login" class="form-control">
     </div>
-    <div class="form-group">
+    <div class="me-2">
         <input type="password" placeholder="Password" name="password" class="form-control">
     </div>
     <button type="submit" class="btn btn-success">Sign In</button>
 </form>
-<div class="navbar-form navbar-right">
+<div class="ms-3">
     <a href="{% url 'register' %}">Реєстрація</a>
 </div>
 {% endif %}
