@@ -1,0 +1,50 @@
+{% extends "blog/base.html" %}
+{% load static %}
+{% block title %}Кошик{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Ваш кошик</h1>
+
+    {% if cart %}
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Товар</th>
+                <th>Кількість</th>
+                <th>Ціна за одиницю</th>
+                <th>Загальна ціна</th>
+                <th>Дії</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart %}
+            <tr>
+                <td>
+                    <a href="{{ item.product.get_absolute_url }}" class="text-decoration-none">{{ item.product.name }}</a>
+                </td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price }}</td>
+                <td>${{ item.total_price }}</td>
+                <td>
+                    <a href="{% url 'cart:cart_remove' item.product.id %}" class="btn btn-danger btn-sm">Видалити</a>
+                </td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="3" class="text-end"><strong>Загалом:</strong></td>
+                <td colspan="2"><strong>${{ cart.get_total_price }}</strong></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="d-flex justify-content-between">
+        <a href="{% url 'shop:product_list' %}" class="btn btn-primary">⬅ Продовжити покупки</a>
+        <a href="{% url 'orders:order_create' %}" class="btn btn-success">Оформити замовлення</a>
+    </div>
+
+    {% else %}
+    <p class="alert alert-warning mt-3">Кошик порожній</p>
+    {% endif %}
+</div>
+{% endblock %}

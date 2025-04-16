@@ -1,0 +1,46 @@
+<!-- Blog Search Well -->
+<div class="card mb-4">
+    <h5 class="card-header">Blog Search</h5>
+    <div class="card-body">
+        <form action="{% url 'search' %}" method="GET" class="input-group">
+            <input type="search" name="query" class="form-control" placeholder="Search...">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">
+                <i class="bi bi-search"></i>
+            </button>
+        </form>
+    </div>
+</div>
+
+<!-- Blog Categories Well -->
+<div class="card mb-4">
+    <h5 class="card-header">Blog Categories</h5>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <ul class="list-unstyled">
+                    {% for cat in cats1 %}
+                        <li><a href="{% url 'category' name=cat.name %}">{{ cat }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- /.col-6 -->
+            <div class="col-6">
+                <ul class="list-unstyled">
+                    {% for cat in cats2 %}
+                        <li><a href="{% url 'category' name=cat.name %}">{{ cat }}</a></li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <!-- /.col-6 -->
+        </div>
+    </div>
+</div>
+
+<!-- Side Widget Well -->
+<div class="card mb-4">
+    <h5 class="card-header">Side Widget Well</h5>
+    <div class="card-body">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Inventore, perspiciatis adipisci accusamus
+            laudantium odit aliquam repellat tempore quos aspernatur vero.</p>
+    </div>
+</div>

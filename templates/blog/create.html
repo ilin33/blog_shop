@@ -1,0 +1,22 @@
+{% extends "blog/base.html" %}
+{% with active_page="about" %}
+{% block content %}
+<h1 class="page-header">Create new post</h1>
+
+<form method="POST" action="{% url 'create_post' %}" enctype="multipart/form-data"> <!-- додано enctype для підтримки файлів -->
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+
+  <!-- Форма для поста -->
+  {{ create_form|crispy }}
+
+  <!-- Додавання полів для зображень -->
+  <div class="form-group">
+    <label for="images">Add images to gallery:</label>
+    <input type="file" name="images" multiple class="form-control"> <!-- multiple дозволяє вибирати кілька файлів -->
+  </div>
+
+  <input type="submit" value="Save" class="btn btn-primary">
+</form>
+{% endblock %}
+{% endwith %}
